@@ -14,6 +14,9 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="7.0.5" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.4" />
+    <PackageReference Include="Serilog" Version="2.12.0" />
+    <PackageReference Include="Serilog.Sinks.Console" Version="4.1.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
 
   <ItemGroup>
@@ -22,6 +25,7 @@
     <None Remove="DataBase\" />
     <None Remove="Repository\Interfaces\" />
     <None Remove="DTO\" />
+    <None Remove="Middlewares\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Utils\" />
@@ -29,5 +33,6 @@
     <Folder Include="Repository\" />
     <Folder Include="Repository\Interfaces\" />
     <Folder Include="DTO\" />
+    <Folder Include="Middlewares\" />
   </ItemGroup>
 </Project>

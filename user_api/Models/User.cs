@@ -57,7 +57,8 @@ namespace user_api.Models
 		public Guid ID
 		{
 			get { return id; }
-		}
+            set { id = value; }
+        }
 
         public string Password
 		{

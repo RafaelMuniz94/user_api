@@ -19,7 +19,7 @@ namespace user_api.Controllers
 		}
 
 		[HttpPost("Register",Name = "Register")]
-		public ActionResult Register([FromBody] UserDTO userDto)
+		public ActionResult Register([FromBody] CreateUserDTO userDto)
 		{
 			if (!ModelState.IsValid)
 				return BadRequest(ModelState);
@@ -40,18 +40,69 @@ namespace user_api.Controllers
 			return Ok(user);
 		}
 
-		[HttpDelete("Unregister",Name ="Unregister")]
-		public ActionResult Unregister([FromBody] UserDTO user )
+		[HttpGet("{id}",Name ="findByID")]
+		public async Task<ActionResult> FindByID(Guid id)
+		{
+                User user = await userRepository.FindByID(id);
+
+                if (user == null)
+                {
+                    return NotFound("User ID not found!");
+                }
+
+                return Ok(user);
+
+		}
+
+        [HttpGet("/find", Name = "findByLogin")]
+        public async Task<ActionResult> FindByLogin([FromQuery]FindDTO findDto)
+        {
+            User user = null;
+
+            if (!string.IsNullOrEmpty(findDto.Username))
+            {
+                user = await userRepository.FindByLogin(findDto.Username);
+            }
+            else
+            {
+                user = await userRepository.FindByEmail(findDto.Email);
+            }
+
+            if (user == null)
+            {
+                return NotFound("User not found!");
+            }
+
+            return Ok(user);
+
+        }
+
+
+
+        [HttpDelete("Unregister",Name ="Unregister")]
+		public async Task<ActionResult> Unregister([FromBody] DeleteUserDTO userDto )
 		{
             Password password = new Password();
-            string pass = password.Cryptograph(user.Password);
-			string hashedPass = "";
-			if(pass != hashedPass)
+            User user = await userRepository.FindByID(userDto.ID);
+
+            if (user == null)
+            {
+                return NotFound("User ID not found!");
+            }
+
+            string pass = password.Cryptograph(userDto.Password);
+
+			if(pass != user.Password)
 			{
-				return BadRequest("Bad!");
+				return BadRequest("You must provide the right password!");
 			}
 
-			return Ok();
+			bool userRemoved = await userRepository.Delete(user);
+
+			if (!userRemoved)
+				return BadRequest("User cant be deleted!");
+
+			return StatusCode(202);
 		}
 	}
 }

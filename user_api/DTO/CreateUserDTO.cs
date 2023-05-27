@@ -7,8 +7,8 @@ using System.Xml.Linq;
 namespace user_api.DTO
 {
     [DataContract]
-    public class UserDTO
-	{
+    public class CreateUserDTO
+    {
 
         private string password;
 
@@ -21,7 +21,7 @@ namespace user_api.DTO
         private int age;
 
 
-        public UserDTO()
+        public CreateUserDTO()
 		{
         }
 
@@ -35,7 +35,7 @@ namespace user_api.DTO
         }
 
         [Required(ErrorMessage = "Must provide a User Name!")]
-        [MinLength(3, ErrorMessage = "User Must provide a Name bigger than 3 characters!")]
+        [MinLength(3, ErrorMessage = "Must provide a Name bigger than 3 characters!")]
         [RegularExpression(@"[A-Za-z ]{3,}", ErrorMessage = "User Name must contain only letters!")]
         [DataMember(Name = "user_full_name")]
         [JsonPropertyName("user_full_name")]
@@ -46,7 +46,9 @@ namespace user_api.DTO
         }
 
         [Required]
-        [MinLength(3, ErrorMessage = "User Must provide a username bigger than 3 characters!")]
+        [MinLength(3, ErrorMessage = "Must provide a username bigger than 3 characters!")]
+        [MaxLength(24, ErrorMessage = "Must provide a username not greater than 24 characters!")]
+        [RegularExpression(@"[A-Za-z0-9_]{3,24}", ErrorMessage = "User Name must be in the right format")]
         [DataMember(Name = "login_name")]
         [JsonPropertyName("login_name")]
         public string Username
